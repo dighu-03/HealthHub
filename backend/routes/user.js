@@ -11,7 +11,7 @@ const signupSchema=zod.object({
     name:zod.string().min(3),
     email:zod.email(),
     password:zod.string(),
-    role:zod.enum(["patient","doctor"]).optional(),
+    role:zod.enum(["patient","doctor"]).default('patient'),
     dateOfBirth:zod.string().optional(),
       address: zod.object({
       street: zod.string().optional(),
@@ -58,12 +58,13 @@ router.post("/register",async(req,res)=>{
 
     const token=jwt.sign({
         userId,userRole
-    },JWT_SECRET)
+    },JWT_SECRET, {expiresIn:'7d'})
 
     res.json({
         msg:"User created successfully",
         token:token,
         newUser:{
+            _id:newUser._id,
             name:newUser.name,
             email:newUser.email
         }
@@ -105,11 +106,11 @@ try{
         })
     }
 
-    const token=jwt.sign({userId:findUser._id, role:findUser.role},JWT_SECRET, {expiresIn:'7d'})
+    const token=jwt.sign({userId:findUser._id, role: findUser.role},JWT_SECRET, {expiresIn:'7d'})
     res.json({
         msg:"Logged in",
         token,
-            findUser: {
+            user: {
         name: findUser.name,
         role: findUser.role,
         email: findUser.email

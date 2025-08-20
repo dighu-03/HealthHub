@@ -54,7 +54,7 @@ const appointmentSchema = new mongoose.Schema({
     },
     timeSlot: {
         type: String,
-        required: true
+       
     },
     reason: {
         type: String,
@@ -73,6 +73,16 @@ const appointmentSchema = new mongoose.Schema({
     timestamps: true
 });
 
+const CheckupSchema = new mongoose.Schema({
+  patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  doctorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  date: { type: Date, default: Date.now },
+  notes: String,
+  prescriptions: [String]
+});
+
+const Checkup=mongoose.model('Checkup', CheckupSchema)
+
 const User=mongoose.model('User',userSchema);
 const Appointment=mongoose.model('Appointment', appointmentSchema);
-module.exports={User,Appointment}
+module.exports={User,Appointment,Checkup}

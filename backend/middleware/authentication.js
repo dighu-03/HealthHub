@@ -3,6 +3,7 @@ const JWT_SECRET = require("../token");
 const { User } = require("../config/db");
 
 async function authMiddleware(req,res,next){
+      console.log("Auth middleware called")
     const authHeader=req.headers.authorization;
     if(!authHeader || !authHeader.startsWith('Bearer')){
         return res.status(401).json({msg:"No token provided"})
